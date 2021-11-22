@@ -258,15 +258,16 @@
 
                 function getIris_Rotation(xyz, a, b, min, max){  //將整個調整為[-1, 1]之間
                     //iris_rotation_x = (b - a) * ((rotation.x - min) / (max - min)) + a;
+                    //=> rotation.x = ((iris_rotation_x - a) / (b - a)) * (max - min) + min;
                     //(此公式當max != -min時 當xyz = 0，Iris != 0)
                     min = THREE.MathUtils.degToRad(min);    //角度換算回來
                     max = THREE.MathUtils.degToRad(max);    //
                     //以0作為分界 拆開來運算 避免xyz帶0造成錯位
-                    if(xyz > 0){        //[0, 1]  <==> [0, max]
-                        return -(((xyz - 0) / (0 - a)) * (max - 0));
+                    if(xyz < 0){        //[0, 1]  <==> [0, max]
+                        return (((xyz - 0) / (b - 0)) * (max - 0)) + 0;
                     }
-                    else if(xyz < 0){   //[-1, 0] <==> [min, 0]
-                        return ((0 - xyz) / (b - 0)) * (0 - min);
+                    else if(xyz > 0){   //[-1, 0] <==> [min, 0]
+                        return ((xyz - a) / (0 - a)) * (0 - min) + min;
                     }
                     return 0;
                 }
